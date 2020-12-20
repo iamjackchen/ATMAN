@@ -1,0 +1,22 @@
+Settings
+->Themes
+   -> Light
+   -> Dark
+   -> -
+   -> Other Stuff
+->Webcam
+   -> Select Webcam
+
+Session
+->Configure Email
+->Export Event (CTRL/CMD + S)
+->New Event
+   ->Blank (CTRL/CMD + N)
+   ->Import File (CTRL/CMD + SHIFT + N)
+
+Window
+->Open Data Analyser (CTRL/CMD + SHIFT + A)
+->Open Data Editor (CTRL/CMD + SHIFT + E)
+->Open Event Interface (CTRL/CMD + SHIFT + I) 
+
+

@@ -1,108 +1,104 @@
 package data.types;
 
-import data.AttendanceTableModel;
+import data.types.attributes.Attendance;
+import data.types.attributes.Sex;
 
+import java.io.LineNumberReader;
 import java.util.Arrays;
 
 public class Attendee {
 
-    private String name;
-    private int id;
-    private int age;
-    private char sex; //possible values: M/F for Male/Female, O for other/default for uninitialised value;
-    private String nationality;
-    private int grade;
+    private String[] parameterList;
+    private Object[] parameters;
+    private Class[] parameterTypes;
 
-    private String[] additionalParameterLabels;
-    private Object[] additionalParameters;
-    private Class[] additionalParameterDatatypes;
+    private String QRData = null;
+    public String getQRContents() {return QRData;}
+    public void setQRData(String QRData) {this.QRData = QRData;}
+
+    private final String[] defaultParameterList = {"Select", "Family Name", "Given Name", "ID", "Age", "Sex", "Nationality", "Grade", "Status"};
+    private final Class[] defaultParameterTypes = {Boolean.class, String.class, String.class, Integer.class, Integer.class, Sex.class, String.class, Integer.class, Attendance.class};
+    private final Object[] defaultParameters = {false, "", "", 99999, 0, new Sex("Other"), "", 1, new Attendance("Absent")};
 
     public Attendee() {
 
-        this.name = "";
-        this.id = 99999;
-        this.age = 0;
-        this.sex = 'O';
-        this.nationality = "";
-        this.grade = 0;
-        this.additionalParameterLabels = null;
-        this.additionalParameterDatatypes = null;
+        parameterList = defaultParameterList;
+        parameterTypes = defaultParameterTypes;
+        parameters = defaultParameters;
 
     }
 
-    public Attendee(String name, int id, int age, char sex, String nationality, int grade) {
+    public Attendee(String lastName, String firstName, int id, int age, Sex sex, String nationality, int grade) {
 
-        this.name = name;
-        this.id = id;
-        this.age = age;
-        this.sex = sex;
-        this.nationality = nationality;
-        this.grade = grade;
-        this.additionalParameterLabels = null;
-        this.additionalParameterDatatypes = null;
+        parameterList = defaultParameterList;
+        parameterTypes = defaultParameterTypes;
+        parameters = new Object[]{false, lastName, firstName, id, age, sex, nationality, grade, new Attendance( "Absent")};
 
 
     }
 
-    public Attendee(String[] additionalParameterLabels, Class[] additionalParameterDatatypes, Object[] additionalParameters) {
+    public Attendee(String[] customParameterList, Class[] customParameterTypes, Object[] customParameters, boolean overrideDefault) {
 
-        if (additionalParameterLabels.length != additionalParameterDatatypes.length && additionalParameterDatatypes.length != additionalParameters.length) System.exit(0);
+        if (customParameterList.length != customParameterTypes.length && customParameterTypes.length != customParameters.length) System.exit(0);
 
-        this.additionalParameterLabels = additionalParameterLabels;
-        this.additionalParameterDatatypes = additionalParameterDatatypes;
-        this.additionalParameters = additionalParameters;
+        if (overrideDefault) {
 
-        this.name = "";
-        this.id = 99999;
-        this.age = 0;
-        this.sex = 'O';
-        this.nationality = "";
-        this.grade = 0;
-    }
+            this.parameterList = customParameterList;
+            this.parameterTypes = customParameterTypes;
+            this.parameters = customParameters;
 
-    public Attendee(String[] additionalParameterLabels, Class[] additionalParameterDatatypes, Object[] additionalParameters, String name, int id, int age, char sex, String nationality, int grade) {
+        } else {
 
-        if (additionalParameterLabels.length != additionalParameterDatatypes.length && additionalParameterDatatypes.length != additionalParameters.length) System.exit(0);
+            this.parameterList = Arrays.copyOf(defaultParameterList, defaultParameterList.length+customParameterList.length);
+            System.arraycopy(customParameterList, 0, this.parameterList, defaultParameterList.length, customParameterList.length);
 
-        this.additionalParameterLabels = additionalParameterLabels;
-        this.additionalParameterDatatypes = additionalParameterDatatypes;
-        this.additionalParameters = additionalParameters;
+            this.parameterTypes = Arrays.copyOf(defaultParameterTypes, defaultParameterTypes.length+customParameterTypes.length);
+            System.arraycopy(customParameterTypes, 0, this.parameterTypes, defaultParameterTypes.length, customParameterTypes.length);
 
+            this.parameters = Arrays.copyOf(defaultParameters, defaultParameters.length+customParameters.length);
+            System.arraycopy(customParameters, 0, this.parameters, defaultParameters.length, customParameters.length);
 
-        this.name = name;
-        this.id = id;
-        this.age = age;
-        this.sex = sex;
-        this.nationality = nationality;
-        this.grade = grade;
-    }
-
-
-    public String[] getParameterList() {
-
-        if (additionalParameterLabels != null) {
-            String[] returnVal = Arrays.copyOf(new String[]{"Name", "ID", "Age", "Sex", "Nationality", "Grade"}, 6 + additionalParameterLabels.length);
-            System.arraycopy(additionalParameterLabels, 0, returnVal, 6, additionalParameterLabels.length);
-            return returnVal;
-        } else return new String[]{"Name", "ID", "Age", "Sex", "Nationality", "Grade"};
+        }
 
     }
 
-    public Class[] getParameterDatatypes() {
+    public String[] getParameterList() { return this.parameterList; }
 
-        if (additionalParameterDatatypes != null) {
-            Class[] returnVal = Arrays.copyOf(new Class[]{String.class, Integer.class, Integer.class, Character.class, String.class, Integer.class}, 6 + additionalParameterDatatypes.length);
-            System.arraycopy(additionalParameterDatatypes, 0, returnVal, 6, additionalParameterDatatypes.length);
-            return returnVal;
-        } else return new Class[]{String.class, Integer.class, Integer.class, Character.class, String.class, Integer.class};
-
-    }
+    public Class[] getParameterTypes() { return this.parameterTypes; }
 
     public Object getData(int dataID) {
 
+        try {
 
+            return parameters[dataID];
 
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
+        return null;
+
+    }
+
+    public void setData(int dataID, Object value) throws ClassCastException {
+
+        if (value.getClass().isAssignableFrom(parameterTypes[dataID])) {
+            parameters[dataID] = value;
+        } else {
+            throw new ClassCastException("Error: Tried to assign data of invalid type to attendee: " + value.toString() + "->" + parameterTypes[dataID]);
+        }
+
+    }
+
+    //For Debugging
+    public String toString() {
+
+        String returnValue = "";
+        for (int i = 0; i < parameters.length; i++) {
+            returnValue += (parameters[i].toString()) + ", ";
+        }
+
+        return returnValue;
 
     }
 

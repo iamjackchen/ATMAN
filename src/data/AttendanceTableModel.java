@@ -7,16 +7,24 @@ import java.util.List;
 public class AttendanceTableModel extends AbstractTableModel {
 
     private List<Attendee> attendeeList;
-
+    private List<Attendee> backupCopy = null;
     private String[] parameters;
-
     private Class[] parameterTypes;
+    private boolean editable;
 
     public AttendanceTableModel(List<Attendee> attendeeList) {
         this.attendeeList = attendeeList;
         this.parameters = attendeeList.get(0).getParameterList();
-        this.parameterTypes = attendeeList.get(0).getParameterDatatypes();
+        this.parameterTypes = attendeeList.get(0).getParameterTypes();
     }
+
+    public void backup() {backupCopy = attendeeList;}
+    public void revertToBackup() {attendeeList = backupCopy; backupCopy = null;}
+    public void removeBackup() {backupCopy = null;}
+
+    public void setEditable(boolean editable) { this.editable = editable; }
+
+    public Attendee getAttendeeAt(int rowIndex) {return attendeeList.get(rowIndex);}
 
     @Override
     public int getRowCount() { return attendeeList.size(); }
@@ -31,20 +39,20 @@ public class AttendanceTableModel extends AbstractTableModel {
     public String getColumnName(int column) {return parameters[column];}
 
     @Override
-    public Object getValueAt(int i, int i1) {
-        return null;
+    public Object getValueAt(int rowIndex, int columnIndex) { return attendeeList.get(rowIndex).getData(columnIndex); }
+
+    @Override
+    public boolean isCellEditable(int rowIndex, int columnIndex) {return editable;}
+
+    @Override
+    public void setValueAt(Object value, int rowIndex, int columnIndex) {
+
+        try {
+            attendeeList.get(rowIndex).setData(columnIndex, value);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
-
-    public Object getvalueAt(int rowIndex, int columnIndex) {
-
-        Attendee row = attendeeList.get(rowIndex);
-
-        return null;
-
-
-
-
-    }
-
 
 }
