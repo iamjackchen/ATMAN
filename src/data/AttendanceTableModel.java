@@ -2,6 +2,7 @@ package data;
 
 import data.types.Attendee;
 import javax.swing.table.AbstractTableModel;
+import java.util.ArrayList;
 import java.util.List;
 
 public class AttendanceTableModel extends AbstractTableModel {
@@ -10,7 +11,7 @@ public class AttendanceTableModel extends AbstractTableModel {
     private List<Attendee> backupCopy = null;
     private String[] parameters;
     private Class[] parameterTypes;
-    private boolean editable;
+    private boolean editable = false;
 
     public AttendanceTableModel(List<Attendee> attendeeList) {
         this.attendeeList = attendeeList;
@@ -18,7 +19,7 @@ public class AttendanceTableModel extends AbstractTableModel {
         this.parameterTypes = attendeeList.get(0).getParameterTypes();
     }
 
-    public void backup() {backupCopy = attendeeList;}
+    public void backup() {backupCopy = new ArrayList<Attendee>(); backupCopy.addAll(attendeeList);}
     public void revertToBackup() {attendeeList = backupCopy; backupCopy = null;}
     public void removeBackup() {backupCopy = null;}
 
@@ -50,7 +51,7 @@ public class AttendanceTableModel extends AbstractTableModel {
     public Object getValueAt(int rowIndex, int columnIndex) { return attendeeList.get(rowIndex).getData(columnIndex); }
 
     @Override
-    public boolean isCellEditable(int rowIndex, int columnIndex) {return editable;}
+    public boolean isCellEditable(int rowIndex, int columnIndex) {return (columnIndex == 0)?true:editable;}
 
     @Override
     public void setValueAt(Object value, int rowIndex, int columnIndex) {
@@ -66,8 +67,13 @@ public class AttendanceTableModel extends AbstractTableModel {
     public void clearData() {
 
         this.attendeeList.clear();
+        this.extendData();
+
+
+    }
+
+    public void extendData() {
+
         this.attendeeList.add(new Attendee(""));
-
-
     }
 }

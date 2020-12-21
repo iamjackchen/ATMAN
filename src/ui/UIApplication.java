@@ -25,29 +25,17 @@ public class UIApplication extends JFrame {
         list.add(c);
 
         AttendanceTableModel test  = new AttendanceTableModel(list);
-        test.setEditable(true);
-
-        /*
-        JTable table = new JTable(test);
-        table.setDefaultRenderer(Enumerator.class, new EnumCellRenderer());
-        table.setDefaultEditor(Sex.class, new EnumCellEditor(Sex.getSexOptions(), Sex.class));
-        table.setDefaultEditor(Attendance.class, new EnumCellEditor(Attendance.getAttendanceOptions(), Attendance.class));
-        this.add(new JScrollPane(table));
-        */
+        test.setSaved(true);
 
         CloseableJTabbedPane panelHolder = new CloseableJTabbedPane();
-        panelHolder.addTab("Analyser", new DataEditor(test));
-
-
-
         this.add(panelHolder);
-        this.setJMenuBar(new MenuBar(test));
+        this.setJMenuBar(new MenuBar(test, panelHolder));
 
-        this.setTitle("Table Example");
+        this.setTitle("Attendance Manager v1.0");
         this.setPreferredSize(new Dimension(1920,  1080));
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setLocationRelativeTo(null);
         this.pack();
+        this.setLocationRelativeTo(null);
         this.setVisible(true);
 
 
