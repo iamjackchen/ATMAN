@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 public class CsvUtilities {
 
-    public static ArrayList<Attendee> getAttendeeFromCSV(String filepath) {
+    public static ArrayList<Attendee> getAttendeeListFromCSV(String filepath) {
 
         return null;
     }

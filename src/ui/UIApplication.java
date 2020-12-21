@@ -3,6 +3,8 @@ package ui;
 import data.AttendanceTableModel;
 import data.types.Attendee;
 import data.types.attributes.Sex;
+import ui.containers.CloseableJTabbedPane;
+import ui.containers.MenuBar;
 import ui.panels.DataEditor;
 
 import javax.swing.*;
@@ -33,13 +35,13 @@ public class UIApplication extends JFrame {
         this.add(new JScrollPane(table));
         */
 
-        JTabbedPane panelHolder = new JTabbedPane();
+        CloseableJTabbedPane panelHolder = new CloseableJTabbedPane();
         panelHolder.addTab("Analyser", new DataEditor(test));
 
 
 
         this.add(panelHolder);
-
+        this.setJMenuBar(new MenuBar(test));
 
         this.setTitle("Table Example");
         this.setPreferredSize(new Dimension(1920,  1080));

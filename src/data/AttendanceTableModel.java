@@ -22,6 +22,14 @@ public class AttendanceTableModel extends AbstractTableModel {
     public void revertToBackup() {attendeeList = backupCopy; backupCopy = null;}
     public void removeBackup() {backupCopy = null;}
 
+    public void setAttendeeList(List<Attendee> attendeeList) { this.attendeeList = attendeeList; }
+    public List<Attendee> getAttendeeList() {return this.attendeeList;}
+
+
+    private boolean isSaved = false;
+    public boolean isSaved() {return isSaved;}
+    public void setSaved(boolean e) {this.isSaved = e;}
+
     public void setEditable(boolean editable) { this.editable = editable; }
 
     public Attendee getAttendeeAt(int rowIndex) {return attendeeList.get(rowIndex);}
@@ -55,4 +63,11 @@ public class AttendanceTableModel extends AbstractTableModel {
 
     }
 
+    public void clearData() {
+
+        this.attendeeList.clear();
+        this.attendeeList.add(new Attendee(""));
+
+
+    }
 }

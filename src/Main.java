@@ -1,4 +1,3 @@
-import com.formdev.flatlaf.FlatDarculaLaf;
 import com.formdev.flatlaf.FlatDarkLaf;
 import ui.UIApplication;
 
@@ -13,6 +12,8 @@ public class Main {
             } catch (Exception e) {
                 e.printStackTrace();
             }
+
+            System.setProperty("apple.laf.useScreenMenuBar", "true");
 
             SwingUtilities.invokeLater(new Runnable() {
                 @Override

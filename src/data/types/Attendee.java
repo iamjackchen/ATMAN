@@ -3,7 +3,7 @@ package data.types;
 import data.types.attributes.Attendance;
 import data.types.attributes.Sex;
 
-import java.io.LineNumberReader;
+
 import java.util.Arrays;
 
 public class Attendee {
@@ -62,6 +62,14 @@ public class Attendee {
 
     }
 
+    public Attendee(String e) {
+
+        parameterList = defaultParameterList;
+        parameterTypes = defaultParameterTypes;
+        parameters = new Object[]{false, null, null, null, null, new Sex("Other"), null, null, new Attendance( "Absent")};
+
+    }
+
     public String[] getParameterList() { return this.parameterList; }
 
     public Class[] getParameterTypes() { return this.parameterTypes; }
@@ -101,9 +109,4 @@ public class Attendee {
         return returnValue;
 
     }
-
-
-
-
-
 }

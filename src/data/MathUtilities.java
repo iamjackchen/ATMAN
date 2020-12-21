@@ -26,4 +26,5 @@ public class MathUtilities {
         return MatrixToImageWriter.toBufferedImage(bitmatrix);
     }
 
+
 }
