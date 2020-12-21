@@ -28,11 +28,11 @@ public class Attendee {
 
     }
 
-    public Attendee(String lastName, String firstName, int id, int age, Sex sex, String nationality, int grade) {
+    public Attendee(String lastName, String firstName, int id, int age, Sex sex, String nationality, int grade, Attendance attendance) {
 
         parameterList = defaultParameterList;
         parameterTypes = defaultParameterTypes;
-        parameters = new Object[]{false, lastName, firstName, id, age, sex, nationality, grade, new Attendance( "Absent")};
+        parameters = new Object[]{false, lastName, firstName, id, age, sex, nationality, grade, attendance};
 
 
     }
@@ -98,15 +98,17 @@ public class Attendee {
 
     }
 
-    //For Debugging
     public String toString() {
 
         String returnValue = "";
-        for (int i = 0; i < parameters.length; i++) {
-            returnValue += (parameters[i].toString()) + ", ";
+        for (int i = 0; i < parameters.length-1; i++) {
+            returnValue += (parameters[i].toString()) + ",";
         }
+
+        returnValue += parameters[parameters.length-1];
 
         return returnValue;
 
     }
+
 }

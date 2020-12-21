@@ -10,6 +10,7 @@ public class AttendanceTableModel extends AbstractTableModel {
     private List<Attendee> attendeeList;
     private List<Attendee> backupCopy = null;
     private String[] parameters;
+
     private Class[] parameterTypes;
     private boolean editable = false;
 

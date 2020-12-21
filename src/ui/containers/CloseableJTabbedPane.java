@@ -1,6 +1,8 @@
 package ui.containers;
 
 import com.formdev.flatlaf.icons.FlatTabbedPaneCloseIcon;
+import com.github.sarxos.webcam.Webcam;
+import com.github.sarxos.webcam.WebcamPanel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -76,6 +78,16 @@ public class CloseableJTabbedPane extends JTabbedPane {
             if(e.getSource() instanceof JButton){
                 JButton clickedButton = (JButton) e.getSource();
                 JTabbedPane tabbedPane = (JTabbedPane) clickedButton.getParent().getParent().getParent();
+
+                //Checks for any webcam panels open in the component in the closed tab. Necessary or else webcams will remain in use post-tab-close
+                if (tab instanceof JPanel) {
+                    Component[] components = ((JPanel)tab).getComponents();
+                    for (Component component : components)
+                        if (component instanceof WebcamPanel)
+                            ((WebcamPanel) component).stop();
+
+                }
+
                 tabbedPane.remove(tab);
             }
         }

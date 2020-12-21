@@ -26,5 +26,15 @@ public class MathUtilities {
         return MatrixToImageWriter.toBufferedImage(bitmatrix);
     }
 
+    public static Integer tryParseInt(String e) {
+
+        try {
+            return Integer.parseInt(e);
+        } catch (NumberFormatException ex) {
+            return null;
+        }
+
+    }
+
 
 }

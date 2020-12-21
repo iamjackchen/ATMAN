@@ -2,6 +2,7 @@ package ui;
 
 import data.AttendanceTableModel;
 import data.types.Attendee;
+import data.types.attributes.Attendance;
 import data.types.attributes.Sex;
 import ui.containers.CloseableJTabbedPane;
 import ui.containers.MenuBar;
@@ -17,9 +18,9 @@ public class UIApplication extends JFrame {
     public UIApplication() {
 
         List<Attendee> list = new ArrayList<Attendee>();
-        Attendee a = new Attendee("Chen", "Jack", 37352, 16, new Sex("Male"), "British", 11);
-        Attendee b = new Attendee("Das", "Rishit", 96969, 17, new Sex("Male"), "Indian", 11);
-        Attendee c = new Attendee("Camacho", "Jonathan", 20420, 16, new Sex("Male"), "American", 11);
+        Attendee a = new Attendee("Chen", "Jack", 37352, 16, new Sex("Male"), "British", 11, new Attendance("Absent"));
+        Attendee b = new Attendee("Das", "Rishit", 96969, 17, new Sex("Male"), "Indian", 11, new Attendance("Absent"));
+        Attendee c = new Attendee("Camacho", "Jonathan", 20420, 16, new Sex("Male"), "American", 11, new Attendance("Absent"));
         list.add(a);
         list.add(b);
         list.add(c);

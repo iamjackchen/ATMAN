@@ -13,6 +13,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 
 public class Session extends JMenu {
 
@@ -25,12 +27,18 @@ public class Session extends JMenu {
             public void actionPerformed(ActionEvent actionEvent) {
 
                 JFileChooser directorySelector = new JFileChooser();
-                directorySelector.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-                int option = directorySelector.showOpenDialog(new JFrame());
+                directorySelector.setFileSelectionMode(JFileChooser.FILES_ONLY);
+                directorySelector.setAcceptAllFileFilterUsed(false);
+                directorySelector.setFileFilter(new FileNameExtensionFilter("*.csv", "csv"));
+                int option = directorySelector.showSaveDialog(new JFrame());
 
                 if (option == JFileChooser.APPROVE_OPTION) {
 
-                    //directorySelector.getSelectedFile().getAbsolutePath() + "/" +
+                    try {
+                        CsvUtilities.writeCSVDefaultParameters(attendanceTableModel, directorySelector.getSelectedFile().getAbsoluteFile());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                     attendanceTableModel.setSaved(true);
 
                     }
@@ -64,7 +72,13 @@ public class Session extends JMenu {
 
                     if (option == JFileChooser.APPROVE_OPTION) {
 
-                        attendanceTableModel.setAttendeeList(CsvUtilities.getAttendeeListFromCSV(fileSelector.getSelectedFile().getAbsolutePath()));
+                        try {
+                            attendanceTableModel.setAttendeeList(CsvUtilities.getAttendeeListFromCSVWithDefaultParameters(fileSelector.getSelectedFile().getAbsolutePath()));
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+
+                        attendanceTableModel.setSaved(false);
                         attendanceTableModel.fireTableDataChanged();
 
                     }
@@ -89,6 +103,7 @@ public class Session extends JMenu {
                         JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION
                 ) {
                     attendanceTableModel.clearData();
+                    attendanceTableModel.setSaved(false);
                     attendanceTableModel.fireTableDataChanged();
                 }
 

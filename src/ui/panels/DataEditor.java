@@ -121,7 +121,7 @@ public class DataEditor extends JPanel {
             }
         });
 
-        JPanel qrTools = new JPanel(new FlowLayout(FlowLayout.RIGHT, 15, 15));
+        JPanel qrTools = new JPanel(new FlowLayout(FlowLayout.LEFT, 15, 15));
 
         qrTools.add(generateQRData);
         qrTools.add(generateQRDataForSelected);
@@ -206,8 +206,6 @@ public class DataEditor extends JPanel {
 
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
 
 
 
