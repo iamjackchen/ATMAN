@@ -3,7 +3,7 @@ package data.types.attributes;
 import java.awt.*;
 import java.util.ArrayList;
 
-public class Enumerator {
+public class Enumerator implements Comparable<Enumerator> {
 
     private ArrayList<String> enumeratorOptions;
     private String currentValue;
@@ -50,4 +50,8 @@ public class Enumerator {
     }
 
 
+    @Override
+    public int compareTo(Enumerator enumerator) {
+        return this.getCurrentValue().compareTo(enumerator.getCurrentValue());
+    }
 }

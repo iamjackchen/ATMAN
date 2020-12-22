@@ -14,4 +14,5 @@ public class Attendance extends Enumerator {
 
     public static String[] getAttendanceOptions() {return attendanceOptions;}
 
+
 }

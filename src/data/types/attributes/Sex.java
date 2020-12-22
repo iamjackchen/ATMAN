@@ -1,6 +1,7 @@
 package data.types.attributes;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 
 public class Sex extends Enumerator {
 
@@ -15,5 +16,6 @@ public class Sex extends Enumerator {
     }
 
     public static String[] getSexOptions() {return sexOptions;}
+
 
 }

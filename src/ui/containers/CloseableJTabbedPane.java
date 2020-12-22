@@ -5,6 +5,8 @@ import com.github.sarxos.webcam.Webcam;
 import com.github.sarxos.webcam.WebcamPanel;
 
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseEvent;
@@ -14,6 +16,8 @@ public class CloseableJTabbedPane extends JTabbedPane {
 
     public CloseableJTabbedPane() {
         super();
+        this.getModel().addChangeListener(new selectedTabListener(this));
+
     }
 
     @Override
@@ -79,7 +83,7 @@ public class CloseableJTabbedPane extends JTabbedPane {
                 JButton clickedButton = (JButton) e.getSource();
                 JTabbedPane tabbedPane = (JTabbedPane) clickedButton.getParent().getParent().getParent();
 
-                //Checks for any webcam panels open in the component in the closed tab. Necessary or else webcams will remain in use post-tab-close
+                //Checks for any webcam panels open in the component in the closed tab. Necessary, otherwise webcams will remain in use post-tab-close
                 if (tab instanceof JPanel) {
                     Component[] components = ((JPanel)tab).getComponents();
                     for (Component component : components)
@@ -112,4 +116,43 @@ public class CloseableJTabbedPane extends JTabbedPane {
             }
         }
     }
+
+
+    public class selectedTabListener implements ChangeListener {
+
+        private CloseableJTabbedPane pane;
+
+        public selectedTabListener(CloseableJTabbedPane pane) {
+            this.pane = pane;
+        }
+
+        @Override
+        public void stateChanged(ChangeEvent e) {
+
+            //Security feature: enables webcams only on the currently open tab. Prevents webcams from being on when its UI panel is defocused
+            //Loops through all components in the tabbed pane and only enables webcams
+            //I feel like this is a bit inefficient though, but I have yet to find a better implementation
+            Component[] tabs = (pane.getComponents());
+            for (Component tab : tabs) {
+                if (tab != pane.getSelectedComponent()) {
+                    if (tab instanceof JPanel) {
+                        Component[] components = ((JPanel) tab).getComponents();
+                        for (Component component : components)
+                            if (component instanceof WebcamPanel)
+                                ((WebcamPanel) component).stop();
+                    }
+                } else {
+                    if (tab instanceof JPanel) {
+                        Component[] components = ((JPanel) tab).getComponents();
+                        for (Component component : components) {
+                            if (component instanceof WebcamPanel)
+                                ((WebcamPanel) component).start();
+                        }
+                    }
+                }
+            }
+
+        }
+    }
+
 }
