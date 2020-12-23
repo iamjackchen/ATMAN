@@ -39,6 +39,7 @@ public class Settings extends JMenu {
 
                     for (java.awt.Window window : JFrame.getWindows()) SwingUtilities.updateComponentTreeUI(window);
 
+
                 }
 
             });

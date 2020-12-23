@@ -33,13 +33,28 @@ public class DataEditor extends JPanel {
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        JButton generateQRData = new JButton("Generate QR Data");
-        generateQRData.addActionListener(new ActionListener() {
+        JButton selectAll = new JButton("Select All");
+        selectAll.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
 
                 for (int i = 0; i < attendanceTableModel.getRowCount(); i++) {
-                    attendanceTableModel.getAttendeeAt(i).setQRData(MathUtilities.generateQRData(25));
+                    attendanceTableModel.getAttendeeAt(i).setData(0, Boolean.TRUE);
+                    attendanceTableModel.fireTableDataChanged();
+
+                }
+
+            }
+        });
+
+        JButton deselectAll = new JButton("Deselect All");
+        deselectAll.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+
+                for (int i = 0; i < attendanceTableModel.getRowCount(); i++) {
+                    attendanceTableModel.getAttendeeAt(i).setData(0, Boolean.FALSE);
+                    attendanceTableModel.fireTableDataChanged();
 
                 }
 
@@ -47,7 +62,7 @@ public class DataEditor extends JPanel {
         });
 
 
-        JButton generateQRDataForSelected = new JButton("Generate QR Data for Selected Only");
+        JButton generateQRDataForSelected = new JButton("Generate QR Data for Selected");
         generateQRDataForSelected.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
@@ -63,36 +78,7 @@ public class DataEditor extends JPanel {
         });
 
 
-        JButton exportQRImages = new JButton("Export QR Images");
-        exportQRImages.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-
-                JFileChooser directorySelector = new JFileChooser();
-                directorySelector.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-                int option = directorySelector.showOpenDialog(new JFrame());
-
-                if (option == JFileChooser.APPROVE_OPTION) {
-
-                    for (int i = 0; i < attendanceTableModel.getRowCount(); i++) {
-
-                        try {
-                            ImageIO.write(MathUtilities.generateQRCodeImage(attendanceTableModel.getAttendeeAt(i).getQRContents()),
-                                    "png",
-                                    new File(directorySelector.getSelectedFile().getAbsolutePath() + "/" + attendanceTableModel.getValueAt(i, 3) + ".png"));
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-
-                    }
-
-                }
-
-            }
-        });
-
-
-        JButton exportQRImagesForSelected = new JButton("Export QR Images for Selected Only");
+        JButton exportQRImagesForSelected = new JButton("Export QR Images for Selected");
         exportQRImagesForSelected.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
@@ -123,9 +109,9 @@ public class DataEditor extends JPanel {
 
         JPanel qrTools = new JPanel(new FlowLayout(FlowLayout.LEFT, 15, 15));
 
-        qrTools.add(generateQRData);
+        qrTools.add(selectAll);
+        qrTools.add(deselectAll);
         qrTools.add(generateQRDataForSelected);
-        qrTools.add(exportQRImages);
         qrTools.add(exportQRImagesForSelected);
 
 

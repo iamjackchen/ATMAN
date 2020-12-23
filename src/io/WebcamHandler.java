@@ -1,4 +1,4 @@
-package ui.handlers;
+package io;
 
 import com.github.sarxos.webcam.Webcam;
 import com.google.zxing.*;
@@ -20,7 +20,6 @@ public class WebcamHandler extends Thread {
     private Webcam webcam;
     private EventKioskDataDisplayPanel dataDisplay;
     private AttendanceTableModel attendanceTableModel;
-    public String getpreviousData() {return previousData;}
 
     private boolean running;
 

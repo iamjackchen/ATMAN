@@ -12,7 +12,7 @@ public class Attendee {
     private Object[] parameters;
     private Class[] parameterTypes;
 
-    private String QRData = "";
+    private String QRData = " ";
     public String getQRContents() {return QRData;}
     public void setQRData(String QRData) {this.QRData = QRData;}
 

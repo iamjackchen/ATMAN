@@ -81,7 +81,7 @@ public class Window extends JMenu {
 
         this.add(openKiosk);
         this.add(openEditor);
-        this.add(openAnalyser);
+        //this.add(openAnalyser);
 
 
     }

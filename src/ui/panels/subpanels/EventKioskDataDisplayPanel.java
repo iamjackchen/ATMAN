@@ -73,9 +73,7 @@ public class EventKioskDataDisplayPanel extends JPanel {
                     attendee.setData(8, new Attendance("Present"));
                 try {
                     update(attendee);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                } catch (Exception e) {}
             }
         });
 
@@ -88,9 +86,7 @@ public class EventKioskDataDisplayPanel extends JPanel {
                     attendee.setData(8, new Attendance("Absent"));
                 try {
                     update(attendee);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                } catch (Exception e) {}
             }
         });
 
@@ -104,7 +100,6 @@ public class EventKioskDataDisplayPanel extends JPanel {
                 try {
                     update(attendee);
                 } catch (Exception e) {
-                    e.printStackTrace();
                 }
             }
         });
@@ -130,15 +125,6 @@ public class EventKioskDataDisplayPanel extends JPanel {
         qrImageContainer.add(qrImage);
 
         this.add(qrImageContainer);
-
-
-
-
-
-
-
-
-
 
 
         /////////////////////////////////////////////////////////////////

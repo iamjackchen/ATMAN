@@ -7,7 +7,6 @@ import data.types.attributes.Attendance;
 import data.types.attributes.Sex;
 
 import java.io.*;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -23,7 +22,7 @@ public class CsvUtilities {
         while ((nextRow = csvReader.readLine()) != null) {
             String[] parsedData = nextRow.split(",");
 
-            if (parsedData.length != 9) throw new IOException("CSV Incomplete");
+            if (parsedData.length != 9) {throw new IOException("CSV Incomplete");}
 
             Attendee newEntry = new Attendee(parsedData[0],
                     parsedData[1],

@@ -2,8 +2,7 @@ package ui.panels;
 
 import com.github.sarxos.webcam.*;
 import data.AttendanceTableModel;
-import data.types.attributes.Attendance;
-import ui.handlers.WebcamHandler;
+import io.WebcamHandler;
 import ui.panels.subpanels.EventKioskDataDisplayPanel;
 
 
