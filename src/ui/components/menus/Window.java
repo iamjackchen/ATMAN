@@ -41,7 +41,7 @@ public class Window extends JMenu {
         openKiosk.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                target.addTab("Event Kiosk", new EventKiosk((openEditor.isEnabled() && openAnalyser.isEnabled())));
+                target.addTab("Event Kiosk", new EventKiosk((openEditor.isEnabled() && openAnalyser.isEnabled()), data));
             }
         });
 

@@ -22,7 +22,9 @@ public class AttendeeComparator implements Comparator {
 
         if (o instanceof Attendee && t1 instanceof Attendee) {
             if ( Arrays.equals((((Attendee)o).getParameterTypes()), (((Attendee)t1).getParameterTypes()))) {
-                if  (((Attendee)o).getParameterTypes()[index] == Integer.class) {
+                if (index == -1)
+                    return ((Attendee) o).getQRContents().compareTo(((Attendee) t1).getQRContents());
+                else if  (((Attendee)o).getParameterTypes()[index] == Integer.class) {
                     return ((Integer) (((Attendee)o).getData(index))).compareTo(((Integer) (((Attendee)t1).getData(index))));
                 } else if  (((Attendee)o).getParameterTypes()[index] == Character.class) {
                     return ((Character) (((Attendee)o).getData(index))).compareTo(((Character) (((Attendee)t1).getData(index))));

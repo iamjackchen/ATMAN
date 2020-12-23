@@ -1,8 +1,11 @@
 package data;
 
 import data.types.Attendee;
+import data.types.AttendeeComparator;
+
 import javax.swing.table.AbstractTableModel;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class AttendanceTableModel extends AbstractTableModel {
@@ -26,6 +29,15 @@ public class AttendanceTableModel extends AbstractTableModel {
 
     public void setAttendeeList(List<Attendee> attendeeList) { this.attendeeList = attendeeList; }
     public List<Attendee> getAttendeeList() {return this.attendeeList;}
+
+    public List<Attendee> getSortedAttendeeList(int index) {
+
+        List<Attendee> returnVal = (List<Attendee>) ((ArrayList<Attendee>) attendeeList).clone();
+        Collections.sort(returnVal, new AttendeeComparator(index));
+
+        return returnVal;
+
+    }
 
 
     private boolean isSaved = false;

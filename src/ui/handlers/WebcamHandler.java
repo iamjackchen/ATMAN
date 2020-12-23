@@ -4,22 +4,30 @@ import com.github.sarxos.webcam.Webcam;
 import com.google.zxing.*;
 import com.google.zxing.client.j2se.BufferedImageLuminanceSource;
 import com.google.zxing.common.HybridBinarizer;
+import data.AttendanceTableModel;
+import data.types.Attendee;
+import data.types.AttendeeComparator;
 import ui.panels.subpanels.EventKioskDataDisplayPanel;
 
+import javax.swing.table.AbstractTableModel;
 import java.awt.image.BufferedImage;
+import java.util.Collections;
+import java.util.List;
 
 public class WebcamHandler extends Thread {
 
-    private String returnData;
+    private String previousData;
     private Webcam webcam;
     private EventKioskDataDisplayPanel dataDisplay;
-    public String getReturnData() {return returnData;}
+    private AttendanceTableModel attendanceTableModel;
+    public String getpreviousData() {return previousData;}
 
     private boolean running;
 
     public void kill() {running = false;}
 
-    public WebcamHandler(Webcam webcam, EventKioskDataDisplayPanel dataDisplay) {
+    public WebcamHandler(Webcam webcam, EventKioskDataDisplayPanel dataDisplay, AttendanceTableModel attendanceTableModel) {
+        this.attendanceTableModel = attendanceTableModel;
         this.dataDisplay = dataDisplay;
         this.webcam = webcam;
         running = true;
@@ -41,15 +49,24 @@ public class WebcamHandler extends Thread {
                         LuminanceSource source = new BufferedImageLuminanceSource(image);
                         BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
                         Result result = new MultiFormatReader().decode(bitmap);
-                        if (result.getText() != null) {
-                            returnData = result.getText();
-                            dataDisplay.getParent().validate();
+                        if (result.getText() != null && result.getText() != previousData) {
+                            previousData = result.getText();
+                            Attendee dummy = new Attendee("");
+                            dummy.setQRData(previousData);
+
+                            int x = Collections.binarySearch(attendanceTableModel.getSortedAttendeeList(-1), dummy, new AttendeeComparator(-1));
+                            dataDisplay.update(attendanceTableModel.getSortedAttendeeList(-1).get(x));
+
+
+
                         }
                     }
                 }
 
             }catch (NotFoundException e) {
                 //pass
+            } catch (Exception e) {
+                e.printStackTrace();
             }
 
         } while (running);

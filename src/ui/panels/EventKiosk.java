@@ -1,6 +1,8 @@
 package ui.panels;
 
 import com.github.sarxos.webcam.*;
+import data.AttendanceTableModel;
+import data.types.attributes.Attendance;
 import ui.handlers.WebcamHandler;
 import ui.panels.subpanels.EventKioskDataDisplayPanel;
 
@@ -14,9 +16,11 @@ public class EventKiosk extends JPanel {
     Webcam webcam;
     WebcamPanel webcamPanel;
     WebcamHandler qrHandler;
+    AttendanceTableModel model;
 
-    public EventKiosk(boolean firstTab) {
+    public EventKiosk(boolean firstTab, AttendanceTableModel model) {
         this.setLayout(new GridLayout(1, 2));
+        this.model = model;
         Webcam webcam = Webcam.getDefault();
 
 
@@ -31,7 +35,7 @@ public class EventKiosk extends JPanel {
         EventKioskDataDisplayPanel dataDisplay = new EventKioskDataDisplayPanel();
         dataDisplay.setBorder(new EmptyBorder(20, 20, 20, 20));
 
-        qrHandler = new WebcamHandler(this.webcam, dataDisplay);
+        qrHandler = new WebcamHandler(this.webcam, dataDisplay, model);
         qrHandler.start();
 
         this.add(webcamPanel);
@@ -41,7 +45,7 @@ public class EventKiosk extends JPanel {
             @Override
             public void webcamOpen(WebcamEvent webcamEvent) {
 
-                qrHandler = new WebcamHandler(webcam, dataDisplay);
+                qrHandler = new WebcamHandler(webcam, dataDisplay, model);
                 qrHandler.start();
 
             }

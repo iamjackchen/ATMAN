@@ -23,9 +23,9 @@ public class CsvUtilities {
         while ((nextRow = csvReader.readLine()) != null) {
             String[] parsedData = nextRow.split(",");
 
-            if (parsedData.length != 8) throw new IOException("CSV Incomplete");
+            if (parsedData.length != 9) throw new IOException("CSV Incomplete");
 
-            returnVal.add(new Attendee(parsedData[0],
+            Attendee newEntry = new Attendee(parsedData[0],
                     parsedData[1],
                     MathUtilities.tryParseInt(parsedData[2]),
                     MathUtilities.tryParseInt(parsedData[3]),
@@ -33,7 +33,11 @@ public class CsvUtilities {
                     parsedData[5],
                     MathUtilities.tryParseInt(parsedData[6]),
                     new Attendance(parsedData[7])
-                    ));
+            );
+
+            newEntry.setQRData(parsedData[8]);
+            returnVal.add(newEntry);
+
             
         }
 
@@ -53,6 +57,7 @@ public class CsvUtilities {
 
             String rawAttendeeData = (source.getAttendeeAt(i).toString());
             csvWriter.append(rawAttendeeData.substring(rawAttendeeData.indexOf(",")+1));
+            csvWriter.append("," + source.getAttendeeAt(i).getQRContents());
             csvWriter.append("\n");
 
         }
