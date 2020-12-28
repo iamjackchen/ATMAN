@@ -23,28 +23,36 @@ public class MailSender extends Thread {
 
     private String senderAddress;
     private String host;
+    private String port;
     private Session session;
     private String name;
 
     private List<Attendee> recipients;
 
-    public MailSender(String senderAddress, String password, String host, List<Attendee> recipients, String eventName) {
+    public MailSender(String senderAddress, String password, String host, String port, List<Attendee> recipients, String eventName) {
         this.senderAddress = senderAddress;
+        this.port = port;
         this.recipients = recipients;
         this.name = eventName;
         this.host = host;
 
         Properties properties = System.getProperties();
+        properties.put("mail.smtp.auth", "true");
         properties.setProperty("mail.smtp.host", host);
+        properties.setProperty("mail.smtp.port", port);
+        properties.put("mail.smtp.starttls.enable", "true");
         properties.setProperty("mail.user", senderAddress);
         properties.setProperty("mail.password", password);
 
 
-        session = Session.getDefaultInstance(properties, new javax.mail.Authenticator() {
-            protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication(senderAddress,password);
-            }
-        });
+        session = Session.getDefaultInstance(properties,
+                new javax.mail.Authenticator() {
+                    @Override
+                    protected PasswordAuthentication getPasswordAuthentication() {
+                        return new PasswordAuthentication(senderAddress,password);
+                    }
+                }
+            );
 
 
     }
@@ -53,45 +61,47 @@ public class MailSender extends Thread {
     public void run() {
 
         for (int i = 0; i < recipients.size(); i++) {
-            try {
 
-                MimeMessage message = new MimeMessage(session);
-                message.setFrom(new InternetAddress((senderAddress)));
-                message.addRecipient(Message.RecipientType.TO, new InternetAddress((recipients.get(i).getData(3).toString() + "mail.ssis-suzhou.net")));
-                message.setSubject("E-Ticket for [" + name + "]");
+            if ((boolean)(recipients.get(i).getData(0)))
+                try {
 
-
-                BodyPart textMessage = new MimeBodyPart();
-                textMessage.setText("This is an automated email generated and sent by Attendance Manager v1.0. Please find your e-ticket attached to this email. Coded with <3 by Jack Chen");
+                    MimeMessage message = new MimeMessage(session);
+                    message.setFrom(new InternetAddress((senderAddress)));
+                    message.addRecipient(Message.RecipientType.TO, new InternetAddress((recipients.get(i).getData(3).toString() + "@mail.ssis-suzhou.net")));
+                    message.setSubject("E-Ticket for [" + name + "]");
 
 
-                BodyPart imgAttachment = new MimeBodyPart();
-                File temp = new File("temp");
-                ImageIO.write(MathUtilities.generateQRCodeImage(recipients.get(i).getQRContents()),
-                        "png",
-                        temp);
-                DataSource imgSrc = new FileDataSource(temp);
-                imgAttachment.setDataHandler(new DataHandler(imgSrc));
-                imgAttachment.setFileName("E-Ticket #" + recipients.get(i).getData(3).toString());
+                    BodyPart textMessage = new MimeBodyPart();
+                    textMessage.setText("This is an automated email generated and sent by Attendance Manager v1.0. Please find your e-ticket attached to this email. \n\nCoded with <3 by Jack Chen");
 
 
-                Multipart multipart = new MimeMultipart();
-                multipart.addBodyPart(textMessage);
-                multipart.addBodyPart(textMessage);
-                message.setContent(multipart);
+                    BodyPart imgAttachment = new MimeBodyPart();
+
+                    File temp = new File("temp.png");
+                    ImageIO.write(MathUtilities.generateQRCodeImage(recipients.get(i).getQRContents()),
+                            "png",
+                            temp);
+
+                    DataSource imgSrc = new FileDataSource(temp);
+                    imgAttachment.setDataHandler(new DataHandler(imgSrc));
+                    imgAttachment.setFileName("E-Ticket #" + recipients.get(i).getData(3).toString());
 
 
-                Transport.send(message);
-                temp.delete();
+                    Multipart multipart = new MimeMultipart();
+                    multipart.addBodyPart(textMessage);
+                    multipart.addBodyPart(imgAttachment);
+                    message.setContent(multipart);
 
 
-            } catch (MessagingException | WriterException | IOException e) {
-                e.printStackTrace();
+                    Transport.send(message);
+                    temp.delete();
 
-            }
+
+                } catch (MessagingException | WriterException | IOException e) {
+                    e.printStackTrace();
+
+                }
         }
-
-
 
     }
 
