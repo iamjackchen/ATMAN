@@ -19,11 +19,15 @@ public class UIApplication extends JFrame {
 
         List<Attendee> list = new ArrayList<Attendee>();
         Attendee a = new Attendee("Chen", "Jack", 37352, 16, new Sex("Male"), "British", 11, new Attendance("Absent"));
-        Attendee b = new Attendee("Das", "Rishit", 96969, 17, new Sex("Male"), "Indian", 11, new Attendance("Absent"));
-        Attendee c = new Attendee("Camacho", "Jonathan", 20420, 16, new Sex("Male"), "American", 11, new Attendance("Absent"));
+        Attendee b = new Attendee("Park", "Veronica", 66952, 14, new Sex("Female"), "Korean", 9, new Attendance("Absent"));
+        Attendee c = new Attendee("Yang", "Maggie", 41972, 15, new Sex("Female"), "Chinese", 10, new Attendance("Absent"));
+        Attendee d = new Attendee("Bryer", "Kaeden", 57492, 16, new Sex("Female"), "American", 11, new Attendance("Absent"));
+        Attendee e = new Attendee("Murray", "Leiana", 48233, 15, new Sex("Female"), "New Zealand", 10, new Attendance("Absent"));
         list.add(a);
         list.add(b);
         list.add(c);
+        list.add(d);
+        list.add(e);
 
         AttendanceTableModel test  = new AttendanceTableModel(list);
         test.setSaved(true);
