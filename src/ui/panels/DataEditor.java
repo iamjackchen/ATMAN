@@ -74,6 +74,8 @@ public class DataEditor extends JPanel {
 
                 }
 
+                JOptionPane.showMessageDialog(null,"QR Data Generated Successfully","Task Completed",1);
+
             }
         });
 
@@ -102,7 +104,37 @@ public class DataEditor extends JPanel {
 
                     }
 
+                    JOptionPane.showMessageDialog(null,"Export Successful","Task Completed",1);
+
                 }
+
+            }
+        });
+
+        JButton emailQRImagesForSelected = new JButton("Email QR Images for Selected");
+        exportQRImagesForSelected.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+
+                /*
+
+                for (int i = 0; i < attendanceTableModel.getRowCount(); i++) {
+
+                    if ((boolean) attendanceTableModel.getValueAt(i,0))
+                        try {
+                            ImageIO.write(MathUtilities.generateQRCodeImage(attendanceTableModel.getAttendeeAt(i).getQRContents()),
+                                    "png",
+                                    new File(directorySelector.getSelectedFile().getAbsolutePath() + "/" + attendanceTableModel.getValueAt(i, 3) + ".png"));
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
+                }
+
+                JOptionPane.showMessageDialog(null,"Export Successful","Task Completed",1);
+
+                */
+
 
             }
         });
