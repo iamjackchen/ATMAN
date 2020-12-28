@@ -79,6 +79,7 @@ public class Session extends JMenu {
                         }
 
                         attendanceTableModel.setSaved(false);
+                        attendanceTableModel.setNeedsKioskRefresh(true);
                         attendanceTableModel.fireTableDataChanged();
 
                     }

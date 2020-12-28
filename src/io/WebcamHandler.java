@@ -9,6 +9,8 @@ import data.types.Attendee;
 import data.types.AttendeeComparator;
 import ui.panels.subpanels.EventKioskDataDisplayPanel;
 
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.AbstractTableModel;
 import java.awt.image.BufferedImage;
 import java.util.Collections;
@@ -20,6 +22,7 @@ public class WebcamHandler extends Thread {
     private Webcam webcam;
     private EventKioskDataDisplayPanel dataDisplay;
     private AttendanceTableModel attendanceTableModel;
+    private AttendeeComparator qrComparator = new AttendeeComparator(-1);
 
     private boolean running;
 
@@ -48,14 +51,19 @@ public class WebcamHandler extends Thread {
                         LuminanceSource source = new BufferedImageLuminanceSource(image);
                         BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
                         Result result = new MultiFormatReader().decode(bitmap);
-                        if (result.getText() != null && result.getText() != previousData) {
+
+                        if (attendanceTableModel.needsKioskRefresh()) previousData = "";
+                        //^^ Need this flag to handle cases where a new project is opened without restarting the thread
+                        //If a qr code is scanned before the new project is opened, and then scanned again after the new project is opened,
+                        //the second conditional in the statement below will cause the app to ignore the previously-already-scanned qr code
+
+                        if (result.getText() != null && result.getText() != previousData) /* added second conditional to improve efficiency*/ {
                             previousData = result.getText();
-                            Attendee dummy = new Attendee("");
+                            Attendee dummy = new Attendee();
                             dummy.setQRData(previousData);
 
-                            int x = Collections.binarySearch(attendanceTableModel.getSortedAttendeeList(-1), dummy, new AttendeeComparator(-1));
+                            int x = Collections.binarySearch(attendanceTableModel.getSortedAttendeeList(-1), dummy, qrComparator);
                             dataDisplay.update(attendanceTableModel.getSortedAttendeeList(-1).get(x));
-
 
 
                         }
@@ -71,6 +79,5 @@ public class WebcamHandler extends Thread {
         } while (running);
 
     }
-
 
 }

@@ -17,6 +17,10 @@ public class AttendanceTableModel extends AbstractTableModel {
     private Class[] parameterTypes;
     private boolean editable = false;
 
+    private boolean needsKioskRefresh = false;
+    public boolean needsKioskRefresh() {return needsKioskRefresh;}
+    public void setNeedsKioskRefresh(boolean e) {this.needsKioskRefresh = e;}
+
     public AttendanceTableModel(List<Attendee> attendeeList) {
         this.attendeeList = attendeeList;
         this.parameters = attendeeList.get(0).getParameterList();
@@ -87,6 +91,6 @@ public class AttendanceTableModel extends AbstractTableModel {
 
     public void extendData() {
 
-        this.attendeeList.add(new Attendee(""));
+        this.attendeeList.add(new Attendee());
     }
 }

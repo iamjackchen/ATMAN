@@ -44,6 +44,7 @@ public class EventKiosk extends JPanel {
             @Override
             public void webcamOpen(WebcamEvent webcamEvent) {
 
+
                 qrHandler = new WebcamHandler(webcam, dataDisplay, model);
                 qrHandler.start();
 

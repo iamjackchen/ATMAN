@@ -18,7 +18,7 @@ public class Attendee {
 
     private final String[] defaultParameterList = {"Select", "Family Name", "Given Name", "ID", "Age", "Sex", "Nationality", "Grade", "Status"};
     private final Class[] defaultParameterTypes = {Boolean.class, String.class, String.class, Integer.class, Integer.class, Sex.class, String.class, Integer.class, Attendance.class};
-    private final Object[] defaultParameters = {false, "", "", 99999, 0, new Sex("Other"), "", 1, new Attendance("Absent")};
+    private final Object[] defaultParameters = {false, "", "", null, null, new Sex("Other"), "", null, new Attendance("Absent")};
 
     public Attendee() {
 
@@ -59,14 +59,6 @@ public class Attendee {
             System.arraycopy(customParameters, 0, this.parameters, defaultParameters.length, customParameters.length);
 
         }
-
-    }
-
-    public Attendee(String e) {
-
-        parameterList = defaultParameterList;
-        parameterTypes = defaultParameterTypes;
-        parameters = new Object[]{false, null, null, null, null, new Sex("Other"), null, null, new Attendance( "Absent")};
 
     }
 
