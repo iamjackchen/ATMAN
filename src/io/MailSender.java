@@ -19,8 +19,11 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Properties;
 
-public class MailSender extends Thread {
 
+//Used thread for sending Mail so that in the future, more tasks can be run at the same time if needed without clogging up the call stack
+public class MailSender extends Thread {
+    
+    //Class members
     private String senderAddress;
     private String host;
     private String port;
@@ -28,14 +31,19 @@ public class MailSender extends Thread {
     private String name;
 
     private List<Attendee> recipients;
-
+    
+    
+    //Constructor
     public MailSender(String senderAddress, String password, String host, String port, List<Attendee> recipients, String eventName) {
+        
+        //Initialises members
         this.senderAddress = senderAddress;
         this.port = port;
         this.recipients = recipients;
         this.name = eventName;
         this.host = host;
-
+        
+        //System config
         Properties properties = System.getProperties();
         properties.put("mail.smtp.auth", "true");
         properties.setProperty("mail.smtp.host", host);
@@ -44,7 +52,7 @@ public class MailSender extends Thread {
         properties.setProperty("mail.user", senderAddress);
         properties.setProperty("mail.password", password);
 
-
+        //Attempts to communicate to mail server + authenticate (login)        
         session = Session.getDefaultInstance(properties,
                 new javax.mail.Authenticator() {
                     @Override
@@ -62,11 +70,14 @@ public class MailSender extends Thread {
 
         for (int i = 0; i < recipients.size(); i++) {
 
-            if ((boolean)(recipients.get(i).getData(0)))
+            if ((boolean)(recipients.get(i).getData(0))) //checks if attendee is selected
                 try {
-
+                       
+                    //Creates new email
                     MimeMessage message = new MimeMessage(session);
                     message.setFrom(new InternetAddress((senderAddress)));
+                    
+                    //Sets recipient email depending on Attendee ID
                     message.addRecipient(Message.RecipientType.TO, new InternetAddress((recipients.get(i).getData(3).toString() + "@mail.ssis-suzhou.net")));
                     message.setSubject("E-Ticket for [" + name + "]");
 
@@ -76,7 +87,8 @@ public class MailSender extends Thread {
 
 
                     BodyPart imgAttachment = new MimeBodyPart();
-
+                    
+                    //Generates QR code + attahces it to email
                     File temp = new File("temp.png");
                     ImageIO.write(MathUtilities.generateQRCodeImage(recipients.get(i).getQRContents()),
                             "png",
@@ -92,13 +104,13 @@ public class MailSender extends Thread {
                     multipart.addBodyPart(imgAttachment);
                     message.setContent(multipart);
 
-
+                    //Sends message
                     Transport.send(message);
                     temp.delete();
 
 
                 } catch (MessagingException | WriterException | IOException e) {
-                    e.printStackTrace();
+                    e.printStackTrace(); //Exception handling
 
                 }
         }
