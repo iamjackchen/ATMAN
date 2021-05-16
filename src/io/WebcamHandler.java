@@ -16,8 +16,17 @@ import java.awt.image.BufferedImage;
 import java.util.Collections;
 import java.util.List;
 
-public class WebcamHandler extends Thread {
+/*Need a thread to handle webcam image scanning because
+ - webcam doesn't have built-in function for looped image scanning
+ - incorporating loop directly into UI code may prevent UI code from working properly
+     - There needs to be 2 threads running at the same time, 1 to handle image scanning and 1 to handle image display in the UI panel
 
+
+*/
+
+public class WebcamHandler extends Thread {
+    
+    //class members
     private String previousData;
     private Webcam webcam;
     private EventKioskDataDisplayPanel dataDisplay;
@@ -27,7 +36,8 @@ public class WebcamHandler extends Thread {
     private boolean running;
 
     public void kill() {running = false;}
-
+    
+    //constructor
     public WebcamHandler(Webcam webcam, EventKioskDataDisplayPanel dataDisplay, AttendanceTableModel attendanceTableModel) {
         this.attendanceTableModel = attendanceTableModel;
         this.dataDisplay = dataDisplay;
@@ -45,9 +55,13 @@ public class WebcamHandler extends Thread {
             try {
                 BufferedImage image = null;
                 if (webcam != null) {
+                    
+                    //attempts to get image
                     image = webcam.getImage();
 
                     if (image != null) {
+                        
+                        //image processing
                         LuminanceSource source = new BufferedImageLuminanceSource(image);
                         BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
                         Result result = new MultiFormatReader().decode(bitmap);
@@ -57,11 +71,14 @@ public class WebcamHandler extends Thread {
                         //If a qr code is scanned before the new project is opened, and then scanned again after the new project is opened,
                         //the second conditional in the statement below will cause the app to ignore the previously-already-scanned qr code
 
-                        if (result.getText() != null && result.getText() != previousData) /* added second conditional to improve efficiency*/ {
+                        //if processed image contains text or not
+                        if (result.getText() != null && result.getText() != previousData) /* added second conditional to improve efficiency, effectively caches result*/ {
+                            
                             previousData = result.getText();
                             Attendee dummy = new Attendee();
                             dummy.setQRData(previousData);
-
+                            
+                            //does a binary search through the attendancetablemodel for an attendee that has the same QR data as scanned (via searching for a dummy Attendee
                             int x = Collections.binarySearch(attendanceTableModel.getSortedAttendeeList(-1), dummy, qrComparator);
                             dataDisplay.update(attendanceTableModel.getSortedAttendeeList(-1).get(x));
 
@@ -71,7 +88,7 @@ public class WebcamHandler extends Thread {
                 }
 
             }catch (NotFoundException e) {
-                //pass
+                //pass - nothing detected
             } catch (Exception e) {
                 e.printStackTrace();
             }
