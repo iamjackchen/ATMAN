@@ -12,64 +12,73 @@ import java.awt.*;
 
 public class EventKiosk extends JPanel {
 
-    Webcam webcam;
-    WebcamPanel webcamPanel;
-    WebcamHandler qrHandler;
-    AttendanceTableModel model;
+    private Webcam webcam;
+    private WebcamHandler qrHandler;
+    private AttendanceTableModel model;
 
-    public EventKiosk(boolean firstTab, AttendanceTableModel model) {
+    private EventKioskDataDisplayPanel dataDisplay;
+
+
+    public EventKiosk(AttendanceTableModel model) {
         this.setLayout(new GridLayout(1, 2));
         this.model = model;
-        Webcam webcam = Webcam.getDefault();
+
+        this.dataDisplay = new EventKioskDataDisplayPanel();
+        dataDisplay.setBorder(new EmptyBorder(20, 20, 20, 20));
+
+        this.add(dataDisplay);
+        this.add(new JPanel()); //dummy component (so that the first refresh call does not remove the dataDisplay)
+
+        this.webcam = null;
+        refresh(Webcam.getDefault());
 
 
-        webcam.open(true);
-        webcamPanel = new WebcamPanel(webcam);
 
-        if (!firstTab) webcamPanel.stop();
+
+    }
+
+    public void refresh(Webcam newWebcam) {
+        if (newWebcam == this.webcam) {return;}
+
+        if (this.webcam != null) {this.webcam.close();}
+
+        this.webcam = newWebcam;
+        this.webcam.open(true);
+
+        WebcamPanel webcamPanel = new WebcamPanel(this.webcam);
 
         webcamPanel.setMirrored(false);
         webcamPanel.setSize(WebcamResolution.VGA.getSize());
 
-        EventKioskDataDisplayPanel dataDisplay = new EventKioskDataDisplayPanel();
-        dataDisplay.setBorder(new EmptyBorder(20, 20, 20, 20));
-
-        qrHandler = new WebcamHandler(this.webcam, dataDisplay, model);
+        qrHandler = new WebcamHandler(this.webcam, this.dataDisplay, this.model);
         qrHandler.start();
 
+        this.remove(1);
         this.add(webcamPanel);
-        this.add(dataDisplay);
+        this.revalidate();
+        this.repaint();
 
-        webcam.addWebcamListener(new WebcamListener() {
+        this.webcam.addWebcamListener(new WebcamListener() {
             @Override
             public void webcamOpen(WebcamEvent webcamEvent) {
-
-
                 qrHandler = new WebcamHandler(webcam, dataDisplay, model);
                 qrHandler.start();
-
             }
 
             @Override
             public void webcamClosed(WebcamEvent webcamEvent) {
-
                 qrHandler.kill();
-
             }
 
             @Override
             public void webcamDisposed(WebcamEvent webcamEvent) {
-
                 qrHandler.kill();
-
             }
 
             @Override
             public void webcamImageObtained(WebcamEvent webcamEvent) {
-
             }
         });
 
     }
-
 }
