@@ -257,10 +257,12 @@ public class DataEditor extends JPanel {
 
         JPanel dataEditTools = new JPanel(new FlowLayout(FlowLayout.RIGHT, 15, 15));
 
+        JButton removeSelected = new JButton("Remove Selected Rows");
         JButton addRow = new JButton("Add Row");
         JButton saveEdit = new JButton("Save");
         JButton revertEdit = new JButton("Revert");
         JButton editTable = new JButton("Edit");
+
 
 
         addRow.addActionListener(new ActionListener() {
@@ -268,6 +270,23 @@ public class DataEditor extends JPanel {
             public void actionPerformed(ActionEvent actionEvent) {
                 attendanceTableModel.extendData();
                 attendanceTableModel.fireTableDataChanged();
+
+            }
+        });
+
+
+        removeSelected.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+
+                for (int i = 0; i < attendanceTableModel.getRowCount(); i++) {
+                    if (attendanceTableModel.getAttendeeAt(i).getData(0) == Boolean.TRUE) {
+                        attendanceTableModel.removeAttendeeAt(i);
+                        i--;
+                    }
+                    attendanceTableModel.fireTableDataChanged();
+
+                }
 
             }
         });
@@ -315,6 +334,7 @@ public class DataEditor extends JPanel {
                 attendanceTableModel.setEditable(true);
 
                 dataEditTools.removeAll();
+                dataEditTools.add(removeSelected);
                 dataEditTools.add(addRow);
                 dataEditTools.add(saveEdit);
                 dataEditTools.add(revertEdit);

@@ -59,6 +59,8 @@ public class AttendanceTableModel extends AbstractTableModel {
 
     public Attendee getAttendeeAt(int rowIndex) {return attendeeList.get(rowIndex);}
 
+    public void removeAttendeeAt(int rowIndex) {attendeeList.remove(rowIndex);}
+
     @Override
     public int getRowCount() { return attendeeList.size(); }
 
