@@ -64,6 +64,8 @@ public class CsvUtilities {
         csvWriter.flush();
         csvWriter.close();
 
+        System.out.println("done");
+
     }
 
 

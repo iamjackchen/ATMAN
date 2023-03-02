@@ -27,8 +27,15 @@ public class AttendanceTableModel extends AbstractTableModel {
         this.parameterTypes = attendeeList.get(0).getParameterTypes();
     }
 
-    public void backup() {backupCopy = new ArrayList<Attendee>(); backupCopy.addAll(attendeeList);}
-    public void revertToBackup() {attendeeList = backupCopy; backupCopy = null;}
+    public void backup() {
+
+        backupCopy = new ArrayList<Attendee>();
+        for (Attendee a : attendeeList) {
+            backupCopy.add(new Attendee(a));
+        }
+
+    }
+    public void revertToBackup() { attendeeList = backupCopy; }
     public void removeBackup() {backupCopy = null;}
 
     public void setAttendeeList(List<Attendee> attendeeList) { this.attendeeList = attendeeList; }
@@ -37,7 +44,7 @@ public class AttendanceTableModel extends AbstractTableModel {
     public List<Attendee> getSortedAttendeeList(int index) {
 
         List<Attendee> returnVal = (List<Attendee>) ((ArrayList<Attendee>) attendeeList).clone();
-        Collections.sort(returnVal, new AttendeeComparator(index));
+        returnVal.sort(new AttendeeComparator(index));
 
         return returnVal;
 

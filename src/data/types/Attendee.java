@@ -28,13 +28,19 @@ public class Attendee {
 
     }
 
+    public Attendee(Attendee a) {
+        this.parameterList = a.parameterList.clone();
+        this.parameters = a.parameters.clone();
+        this.parameterTypes = a.parameterTypes.clone();
+        this.QRData = a.QRData;
+    }
+
     public Attendee(String lastName, String firstName, int id, int age, Sex sex, String nationality, int grade, Attendance attendance) {
 
         parameterList = defaultParameterList;
         parameterTypes = defaultParameterTypes;
         parameters = new Object[]{false, lastName, firstName, id, age, sex, nationality, grade, attendance};
-
-
+        
     }
 
     public Attendee(String[] customParameterList, Class[] customParameterTypes, Object[] customParameters, boolean overrideDefault) {

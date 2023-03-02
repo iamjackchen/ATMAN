@@ -293,9 +293,9 @@ public class DataEditor extends JPanel {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
 
-                attendanceTableModel.setEditable(false);
                 attendanceTableModel.revertToBackup();
                 attendanceTableModel.removeBackup();
+                attendanceTableModel.setEditable(false);
                 attendanceTableModel.fireTableDataChanged();
 
                 dataEditTools.removeAll();
