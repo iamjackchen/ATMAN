@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/AtManH2H_java.iml" filepath="$PROJECT_DIR$/AtManH2H_java.iml" />
+      <module fileurl="file://$PROJECT_DIR$/AtMan.iml" filepath="$PROJECT_DIR$/AtMan.iml" />
     </modules>
   </component>
 </project>
