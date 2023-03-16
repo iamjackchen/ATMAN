@@ -1,5 +1,5 @@
 # ATMan
- A QR-based event attendance manager written in Java
+ A QR-based event attendance manager written in Java.
 
 ## Usage Instructions
 
@@ -15,7 +15,7 @@ The data editor section allows you to input data for the attendees of the intend
 </p>
 
 ATMan has CSV integration: you can export your session as a CSV, modify it externally,
-and then import it back into the session. CSV import/export can be accessed through the session menu 
+and then import it back into the session. CSV import/export can be accessed through the session menu.
 
 Once you are done, you may select a subset of attendees to generate matching QR data for. 
 Each attendee will receive a randomised string that serves as their "passcode" for the event.
@@ -26,13 +26,13 @@ ATMan has built-in email support for automated QR code distribution via email (u
 attendee ID directly as an email address, or using the attendee ID added to a provided domain name, e.g. abcd@domain).
 You may also choose to distribute tickets manually
 
-** A note on Gmail. Gmail has limited support for external account access without two-factor authentication
+** A note on Gmail. Gmail has limited support for external account access without two-factor authentication.
 You will need to generate a custom app password from your Google account and use that password for ATMan's built-in
 email handler 
 
 #### Event Kiosk
-
-The event kiosk is a live session where you can scan tickets via a connected webcam and mark attendees as present or absent
+.
+The event kiosk is a live session where you can scan tickets via a connected webcam and mark attendees as present or absent.
 Simply hold your ticket up to the camera, and the app will automatically recognise the QR code and match it to a registered attendee
 
 ![](https://raw.githubusercontent.com/iamjackchen/ATMAN/main/Screenshots/EventKiosk.png)
