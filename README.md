@@ -28,10 +28,10 @@ You may also choose to distribute tickets manually
 
 ** A note on Gmail. Gmail has limited support for external account access without two-factor authentication.
 You will need to generate a custom app password from your Google account and use that password for ATMan's built-in
-email handler 
+email handler.
 
 #### Event Kiosk
-.
+
 The event kiosk is a live session where you can scan tickets via a connected webcam and mark attendees as present or absent.
 Simply hold your ticket up to the camera, and the app will automatically recognise the QR code and match it to a registered attendee
 
