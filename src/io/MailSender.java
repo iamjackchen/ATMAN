@@ -14,6 +14,7 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
+import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
@@ -29,12 +30,14 @@ public class MailSender extends Thread {
     private String port;
     private Session session;
     private String name;
+    private Boolean generateWithDomain;
+    private String domain;
 
     private List<Attendee> recipients;
     
     
     //Constructor
-    public MailSender(String senderAddress, String password, String host, String port, List<Attendee> recipients, String eventName) {
+    public MailSender(String senderAddress, String password, String host, String port, List<Attendee> recipients, String eventName, Boolean generateWithDomain, String domain) {
         
         //Initialises members
         this.senderAddress = senderAddress;
@@ -42,6 +45,9 @@ public class MailSender extends Thread {
         this.recipients = recipients;
         this.name = eventName;
         this.host = host;
+        this.generateWithDomain = generateWithDomain;
+        this.domain = domain;
+
         
         //System config
         Properties properties = System.getProperties();
@@ -68,35 +74,44 @@ public class MailSender extends Thread {
 
     public void run() {
 
-        for (int i = 0; i < recipients.size(); i++) {
+        boolean success = true;
 
-            if ((boolean)(recipients.get(i).getData(0))) //checks if attendee is selected
-                try {
-                       
+
+        try {
+
+            for (Attendee recipient : recipients) {
+
+                if ((boolean) (recipient.getData(0))) {
+
                     //Creates new email
                     MimeMessage message = new MimeMessage(session);
                     message.setFrom(new InternetAddress((senderAddress)));
-                    
+
                     //Sets recipient email depending on Attendee ID
-                    message.addRecipient(Message.RecipientType.TO, new InternetAddress((recipients.get(i).getData(3).toString() + "@mail.ssis-suzhou.net")));
+
+                    if (generateWithDomain) {
+                        message.addRecipient(Message.RecipientType.TO, new InternetAddress((recipient.getData(3).toString() + "@" + domain)));
+                    } else {
+                        message.addRecipient(Message.RecipientType.TO, new InternetAddress((recipient.getData(3).toString())));
+                    }
+
                     message.setSubject("E-Ticket for [" + name + "]");
 
 
                     BodyPart textMessage = new MimeBodyPart();
                     textMessage.setText("This is an automated email generated and sent by Attendance Manager v1.0. Please find your e-ticket attached to this email. \n\nCoded with <3 by Jack Chen");
 
+                    MimeBodyPart imgAttachment = new MimeBodyPart();
 
-                    BodyPart imgAttachment = new MimeBodyPart();
-                    
+
                     //Generates QR code + attahces it to email
                     File temp = new File("temp.png");
-                    ImageIO.write(MathUtilities.generateQRCodeImage(recipients.get(i).getQRContents()),
+                    ImageIO.write(MathUtilities.generateQRCodeImage(recipient.getQRContents()),
                             "png",
                             temp);
 
-                    DataSource imgSrc = new FileDataSource(temp);
-                    imgAttachment.setDataHandler(new DataHandler(imgSrc));
-                    imgAttachment.setFileName("E-Ticket #" + recipients.get(i).getData(3).toString());
+                    imgAttachment.attachFile(temp);
+                    imgAttachment.setFileName("E-Ticket [" + recipient.getData(1).toString() + ", " + recipient.getData(2).toString() + "].png");
 
 
                     Multipart multipart = new MimeMultipart();
@@ -107,13 +122,26 @@ public class MailSender extends Thread {
                     //Sends message
                     Transport.send(message);
                     temp.delete();
+                } //checks if attendee is selected
+
+            }
+
+        } catch (Exception e) {
+            //e.printStackTrace(); //Exception handling
+
+            JTextArea errorMessage = new JTextArea(e.getMessage());
+            errorMessage.setEditable(false);
+
+            JOptionPane.showMessageDialog(new JFrame(), errorMessage);
+
+            success = false;
 
 
-                } catch (MessagingException | WriterException | IOException e) {
-                    e.printStackTrace(); //Exception handling
 
-                }
         }
+
+        if (recipients.size() == 0) JOptionPane.showMessageDialog(new JFrame(), new JLabel("No emails sent"));
+            else if (success) JOptionPane.showMessageDialog(new JFrame(), new JLabel("Emails sent successfully"));
 
     }
 

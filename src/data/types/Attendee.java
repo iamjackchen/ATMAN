@@ -17,7 +17,7 @@ public class Attendee {
     public void setQRData(String QRData) {this.QRData = QRData;}
 
     private final String[] defaultParameterList = {"Select", "Family Name", "Given Name", "ID", "Age", "Sex", "Nationality", "Grade", "Status"};
-    private final Class[] defaultParameterTypes = {Boolean.class, String.class, String.class, Integer.class, Integer.class, Sex.class, String.class, Integer.class, Attendance.class};
+    private final Class[] defaultParameterTypes = {Boolean.class, String.class, String.class, String.class, Integer.class, Sex.class, String.class, Integer.class, Attendance.class};
     private final Object[] defaultParameters = {false, "", "", null, null, new Sex("Other"), "", null, new Attendance("Absent")};
 
     public Attendee() {
