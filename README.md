@@ -42,4 +42,4 @@ Simply hold your ticket up to the camera, and the app will automatically recogni
  - Data analytics (for attendence demographics)
  - Extensive theming (ATMan currently has four themes built-in)
  - More user-friendly mail configuration
- - Custom parameters
+ - Custom attendee data parameters
